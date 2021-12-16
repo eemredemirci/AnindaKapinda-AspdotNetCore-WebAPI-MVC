@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace AnindaKapinda.DAL
 {
     [Table("SupplyOfficer")]
-    class SupplyOfficer:User
+    class SupplyOfficer : User
     {
     }
 }

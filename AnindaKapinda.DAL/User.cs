@@ -25,6 +25,7 @@ namespace AnindaKapinda.DAL
 
         [Required(ErrorMessage ="Şifre gerekli")]
         public string Password { get; set; }
+        public bool AccountIsActive { get; set; }
 
     }
 }
