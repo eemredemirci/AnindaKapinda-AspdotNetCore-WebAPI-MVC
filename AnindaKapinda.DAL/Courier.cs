@@ -10,6 +10,6 @@ namespace AnindaKapinda.DAL
     [Table("Couriers")]
     class Courier : Employee
     {
-
+        public string Status { get; set; }
     }
 }

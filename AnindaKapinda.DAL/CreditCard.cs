@@ -14,6 +14,8 @@ namespace AnindaKapinda.DAL
         public string Name { get; set; }
         public DateTime Expiry { get; set; }
         public int Secure { get; set; }
-        
+
+        public Member Member { get; set; }
+
     }
 }

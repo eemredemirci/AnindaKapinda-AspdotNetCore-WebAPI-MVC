@@ -10,5 +10,6 @@ namespace AnindaKapinda.DAL
     [Table("Admins")]
     class Admin : User
     {
+
     }
 }

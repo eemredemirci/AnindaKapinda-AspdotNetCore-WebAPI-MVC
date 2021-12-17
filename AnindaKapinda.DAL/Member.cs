@@ -12,7 +12,14 @@ namespace AnindaKapinda.DAL
     {
         public Member()
         {
-                
+            Orders = new HashSet<Order>();
+            Addresses = new HashSet<Address>();
+            CreditCards = new HashSet<CreditCard>();
         }
+
+        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Order> Orders { get; set; }
+        public ICollection<CreditCard> CreditCards { get; set; }
+        
     }
 }
