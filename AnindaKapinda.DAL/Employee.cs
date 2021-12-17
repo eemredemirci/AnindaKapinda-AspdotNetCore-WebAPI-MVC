@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    [Table("Admins")]
-    class Admin : User
+    [Table("Employees")]
+    class Employee :User
     {
+        public DateTime BirthDate { get; set; }
+        public int Phone { get; set; }
     }
 }
