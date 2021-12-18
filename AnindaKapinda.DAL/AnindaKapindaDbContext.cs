@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,17 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class AnindaKapindaDbContext : DbContext
+    public class AnindaKapindaDbContext : DbContext
     {
+        public IConfiguration Configuration { get; set; }
+
+        public AnindaKapindaDbContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public AnindaKapindaDbContext(DbContextOptions<AnindaKapindaDbContext> options) : base(options)
+        {
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -23,9 +33,9 @@ namespace AnindaKapinda.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if(!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AnindaKapinda;");
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB"));
             }
         }
     }

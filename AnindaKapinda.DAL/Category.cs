@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class Category
+    public class Category
     {
         public Category()
         {

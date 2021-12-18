@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class Product
+    public class Product
     {
         public Product()
         {

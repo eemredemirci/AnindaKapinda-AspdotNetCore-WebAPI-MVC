@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 namespace AnindaKapinda.DAL
 {
     [Table("Couriers")]
-    class Courier : Employee
+    public class Courier : Employee
     {
+        public Courier()
+        {
+            Orders = new HashSet<Order>();
+
+        }
         public string Status { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class CreditCard
+    public class CreditCard
     {
         public int ID { get; set; }
         public int Number { get; set; }

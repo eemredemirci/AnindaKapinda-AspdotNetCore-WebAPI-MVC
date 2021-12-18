@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{6BD6F468-FFF0-4324-BE4B-D14043274CC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationService", "AuthenticationService\AuthenticationService.csproj", "{6BD6F468-FFF0-4324-BE4B-D14043274CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnindaKapinda.API", "AnindaKapinda.API\AnindaKapinda.API.csproj", "{A5180F40-528A-4B04-92FB-E3CE1DAF4AC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnindaKapinda.API", "AnindaKapinda.API\AnindaKapinda.API.csproj", "{A5180F40-528A-4B04-92FB-E3CE1DAF4AC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnindaKapinda.DAL", "AnindaKapinda.DAL\AnindaKapinda.DAL.csproj", "{81D195E0-B5A9-403A-A9C9-0CCAD7AD70C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnindaKapinda.DAL", "AnindaKapinda.DAL\AnindaKapinda.DAL.csproj", "{81D195E0-B5A9-403A-A9C9-0CCAD7AD70C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWT-Test", "JWT-Test\JWT-Test.csproj", "{9288217F-205E-42CC-8A2A-479A200AAEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{81D195E0-B5A9-403A-A9C9-0CCAD7AD70C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81D195E0-B5A9-403A-A9C9-0CCAD7AD70C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81D195E0-B5A9-403A-A9C9-0CCAD7AD70C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9288217F-205E-42CC-8A2A-479A200AAEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9288217F-205E-42CC-8A2A-479A200AAEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9288217F-205E-42CC-8A2A-479A200AAEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9288217F-205E-42CC-8A2A-479A200AAEFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

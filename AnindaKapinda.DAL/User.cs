@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AnindaKapinda.DAL
 {
     [Table("Users")]
-    class User
+    public class User
     {
         [Key]
         public int ID { get; set; }
@@ -25,9 +25,11 @@ namespace AnindaKapinda.DAL
 
         public string Mail { get; set; }
 
-        [Required(ErrorMessage ="Şifre gerekli")]
+        [Required(ErrorMessage = "Şifre gerekli")]
         public string Password { get; set; }
         public bool IsAccountActive { get; set; }
-
+        public string RefreshToken { get; set; }
+        public int RefreshTokenDuration { get; set; }
+        //public string Role { get; set; }
     }
 }

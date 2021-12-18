@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class Address
+    public class Address
     {
         public int ID { get; set; }
         public string City { get; set; }
