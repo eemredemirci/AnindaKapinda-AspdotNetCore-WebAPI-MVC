@@ -15,18 +15,12 @@ namespace AuthenticationService.Models
 {
     public class TokenHandler
     {
-        public IConfiguration Configuration { get; set; }
-        
-        public TokenHandler(IConfiguration configuration)
-        {
-            Configuration = configuration;
-
-        }
         //Token üretecek metot.
         public Token CreateAccessToken(User user)
         {
+
             Token tokenInstance = new Token();
-            TokenOption tokenOption = Configuration.GetSection("TokenOption").Get<TokenOption>();
+            TokenOption tokenOption = Startup.Configuration.GetSection("TokenOption").Get<TokenOption>();
 
             //Security  Key'in simetriğini alıyoruz.
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOption.SecurityKey));
@@ -36,10 +30,11 @@ namespace AuthenticationService.Models
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
-            claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, user.Mail));
+            claims.Add(new Claim(ClaimTypes.Email, user.Mail));
+            claims.Add(new Claim(ClaimTypes.Name, user.Name));
             claims.Add(new Claim(ClaimTypes.Role, user.Role));
 
-            string audience="";
+            string audience = "";
             if (user.Role == "Member")
             {
                 audience = tokenOption.Audiences[0];
@@ -64,7 +59,7 @@ namespace AuthenticationService.Models
 
             //Token üretiyoruz.
             tokenInstance.AccessToken = tokenHandler.WriteToken(securityToken);
-            
+
             //Refresh Token üretiyoruz.
             tokenInstance.RefreshToken = CreateRefreshToken();
             return tokenInstance;

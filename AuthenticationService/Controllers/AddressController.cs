@@ -1,7 +1,9 @@
 ﻿using AnindaKapinda.API.Models.Repository;
 using AnindaKapinda.DAL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +12,18 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize(Roles = "Member")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AddressController : ControllerBase
+    public class AddressController : BaseController
     {
-        AnindaKapindaDbContext context;
-        private readonly IAppUser _appUser;
-
-        public AddressController(AnindaKapindaDbContext dbContext,IAppUser appUser)
+        public AddressController(AnindaKapindaDbContext context) : base(context)
         {
-            context = dbContext;
-            _appUser = appUser;
+
         }
+
         //Adres ekle
         [HttpPost]
-        [Route("AdresEkle")]
-
         public IActionResult AddAddress(Address address)
         {
             // Claim'den üye ID al
@@ -34,6 +32,7 @@ namespace AnindaKapinda.API.Controllers
 
             //ID den üyeyi bul
             Member member = context.Members.SingleOrDefault(a => a.ID == id);
+
             if (member == null)
             {
                 return NotFound("Member not found!");

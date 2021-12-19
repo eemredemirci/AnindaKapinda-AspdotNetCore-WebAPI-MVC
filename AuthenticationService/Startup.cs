@@ -20,7 +20,7 @@ namespace AuthenticationService
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        internal static IConfiguration Configuration { get; private set; }
 
         public Startup(IConfiguration configuration)
         {

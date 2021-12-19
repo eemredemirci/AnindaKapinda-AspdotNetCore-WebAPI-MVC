@@ -15,24 +15,21 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using AnindaKapinda.API;
 using FluentValidation.Results;
+using AnindaKapinda.API.Controllers;
 
 namespace AuthenticationService.Controllers
 {
     [AllowAnonymous]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : BaseController
     {
-        AnindaKapindaDbContext context;
-
-        readonly IConfiguration _configuration;
 
         //public List<Token> listTokens = new();
 
-        public AuthenticationController(AnindaKapindaDbContext dbContext, IConfiguration configuration)
+        public AuthenticationController(AnindaKapindaDbContext context):base(context)
         {
-            context = dbContext;
-            _configuration = configuration;
+            
         }
 
         //Sadece üye ekle
@@ -101,7 +98,7 @@ namespace AuthenticationService.Controllers
             if (login != null && login.Password == user.Password && login.Mail == user.Mail)
             {
                 //Token üretiliyor.
-                TokenHandler tokenHandler = new TokenHandler(_configuration);
+                TokenHandler tokenHandler = new TokenHandler();
                 Token token = tokenHandler.CreateAccessToken(login);
 
                 //Token kayıt ediliyor

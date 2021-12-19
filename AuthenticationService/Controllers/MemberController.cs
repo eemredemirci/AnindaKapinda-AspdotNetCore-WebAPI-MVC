@@ -17,13 +17,12 @@ namespace AnindaKapinda.API.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
 
-    public class MemberController : ControllerBase
+    public class MemberController : BaseController
     {
-        AnindaKapindaDbContext context;
 
-        public MemberController(AnindaKapindaDbContext dbContext)
+        public MemberController(AnindaKapindaDbContext context) : base(context)
         {
-            context = dbContext;
+           
         }
 
         [HttpGet]
