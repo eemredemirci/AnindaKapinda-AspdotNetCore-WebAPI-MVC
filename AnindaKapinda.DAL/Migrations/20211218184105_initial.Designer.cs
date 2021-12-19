@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnindaKapinda.DAL.Migrations
 {
     [DbContext(typeof(AnindaKapindaDbContext))]
-    [Migration("20211217152606_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20211218184105_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,16 +125,11 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SupplyOfficerID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("AddressID");
 
                     b.HasIndex("CourierID");
-
-                    b.HasIndex("SupplyOfficerID");
 
                     b.ToTable("Orders");
                 });
@@ -191,6 +186,15 @@ namespace AnindaKapinda.DAL.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
@@ -304,10 +308,6 @@ namespace AnindaKapinda.DAL.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("CourierID");
 
-                    b.HasOne("AnindaKapinda.DAL.SupplyOfficer", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("SupplyOfficerID");
-
                     b.Navigation("Address");
 
                     b.Navigation("Courier");
@@ -410,11 +410,6 @@ namespace AnindaKapinda.DAL.Migrations
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Courier", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("AnindaKapinda.DAL.SupplyOfficer", b =>
                 {
                     b.Navigation("Orders");
                 });

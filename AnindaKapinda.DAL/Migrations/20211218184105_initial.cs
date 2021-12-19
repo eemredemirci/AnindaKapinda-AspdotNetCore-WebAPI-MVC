@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AnindaKapinda.DAL.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,10 @@ namespace AnindaKapinda.DAL.Migrations
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAccountActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsAccountActive = table.Column<bool>(type: "bit", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -208,8 +211,7 @@ namespace AnindaKapinda.DAL.Migrations
                     Quantity = table.Column<short>(type: "smallint", nullable: false),
                     Discount = table.Column<float>(type: "real", nullable: false),
                     CourierID = table.Column<int>(type: "int", nullable: true),
-                    AddressID = table.Column<int>(type: "int", nullable: true),
-                    SupplyOfficerID = table.Column<int>(type: "int", nullable: true)
+                    AddressID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -224,12 +226,6 @@ namespace AnindaKapinda.DAL.Migrations
                         name: "FK_Orders_Couriers_CourierID",
                         column: x => x.CourierID,
                         principalTable: "Couriers",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Orders_SupplyOfficers_SupplyOfficerID",
-                        column: x => x.SupplyOfficerID,
-                        principalTable: "SupplyOfficers",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -313,11 +309,6 @@ namespace AnindaKapinda.DAL.Migrations
                 column: "CourierID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_SupplyOfficerID",
-                table: "Orders",
-                column: "SupplyOfficerID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryID",
                 table: "Products",
                 column: "CategoryID");
@@ -338,6 +329,9 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "OrderProduct");
 
             migrationBuilder.DropTable(
+                name: "SupplyOfficers");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -348,9 +342,6 @@ namespace AnindaKapinda.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Couriers");
-
-            migrationBuilder.DropTable(
-                name: "SupplyOfficers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

@@ -1,6 +1,10 @@
+using JWT_Test.DbContext;
+using JWT_Test.IdentityAuth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,16 +15,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnindaKapinda.DAL;
-using AuthenticationService.Models;
-using FluentValidation.AspNetCore;
 
-namespace AuthenticationService
+namespace JWT_Test
 {
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,33 +30,36 @@ namespace AuthenticationService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>()); ;
+            services.AddControllers();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB")));
 
-            services.AddDbContext<AnindaKapindaDbContext>(options => 
-            options.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB")));
-
-            services.Configure<TokenOption>(Configuration.GetSection("TokenOption"));
-
+            // For Identity
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+            
+            // Adding Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            // Adding Jwt Bearer
+            .AddJwtBearer(options =>
             {
-                TokenOption tokenOptions = Configuration.GetSection("TokenOption").Get<TokenOption>();
-
-                config.TokenValidationParameters = new TokenValidationParameters()
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = tokenOptions.Issuer,
-                    ValidAudiences = tokenOptions.Audiences,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey)),
-                    ClockSkew = TimeSpan.Zero
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Audience"],
+                    ValidIssuer = Configuration["Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
                 };
             });
+            services.AddAuthorization();
 
         }
 
@@ -68,13 +71,10 @@ namespace AuthenticationService
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>endpoints.MapControllers());
         }
     }
 }

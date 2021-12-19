@@ -10,21 +10,19 @@ namespace AnindaKapinda.DAL
 {
     public class AnindaKapindaDbContext : DbContext
     {
-        public IConfiguration Configuration { get; set; }
-
-        public AnindaKapindaDbContext(IConfiguration configuration)
+        public AnindaKapindaDbContext()
         {
-            Configuration = configuration;
+
         }
         public AnindaKapindaDbContext(DbContextOptions<AnindaKapindaDbContext> options) : base(options)
         {
+
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<SupplyOfficer> SupplyOfficers { get; set; }
         public DbSet<Courier> Couriers { get; set; }
-        public DbSet<Admin> Admins { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -35,7 +33,7 @@ namespace AnindaKapinda.DAL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB"));
+                optionsBuilder.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = AnindaKapinda;");
             }
         }
     }

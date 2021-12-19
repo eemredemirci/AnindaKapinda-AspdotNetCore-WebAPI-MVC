@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace AuthenticationService.Models
 {
-    public class TokenModel
+    public class Token
     {
         public string AccessToken { get; set; }
+        public DateTime Expiration { get; set; }
         public string RefreshToken { get; set; }
-        public int RefreshTokenExpire { get; set; }
     }
 }
