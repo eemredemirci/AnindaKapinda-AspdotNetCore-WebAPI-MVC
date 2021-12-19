@@ -35,7 +35,7 @@ namespace AnindaKapinda.API.Controllers
 
             if (member == null)
             {
-                return NotFound("Member not found!");
+                return NotFound("Üye bulunamadı");
             }
             var city = context.Regions.SingleOrDefault(a => a.City == address.City);
             var province = context.Regions.SingleOrDefault(a => a.Province == address.Province);
@@ -57,6 +57,27 @@ namespace AnindaKapinda.API.Controllers
                 context.SaveChanges();
 
                 return Ok(address);
+            }
+        }
+        //Adres sil
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteAddressById(int id)
+        {
+
+            //ID den bul
+            Address address = context.Addresses.SingleOrDefault(a => a.ID == id);
+
+            if (address == null)
+            {
+                return NotFound("Adres bulanamadı");
+            }
+            else
+            {
+                context.Addresses.Remove(address);
+                context.SaveChanges();
+
+                return NoContent();
             }
 
         }

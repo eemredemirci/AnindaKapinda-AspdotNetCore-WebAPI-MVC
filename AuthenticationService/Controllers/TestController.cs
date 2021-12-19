@@ -17,7 +17,6 @@ namespace AuthenticationService.Controllers
     public class TestController : ControllerBase
     {
         [Authorize(Roles = "Member")]
-
         public IActionResult LoginTest()
         {
             return Ok("Hoş geldiniz member");

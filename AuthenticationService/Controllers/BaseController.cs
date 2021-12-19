@@ -16,9 +16,9 @@ namespace AnindaKapinda.API.Controllers
 {
     public class BaseController : Controller
     {
-        public int _userId = 0;
+        //public int _userId = 0;
 
-        //protected IConfiguration _configuration;
+        public User account;
         protected readonly AnindaKapindaDbContext context;
         public BaseController(AnindaKapindaDbContext dbcontext)
         {
@@ -29,7 +29,7 @@ namespace AnindaKapinda.API.Controllers
         {
             try
             {
-                User account = UserInfo(HttpContext);
+                account = UserInfo(HttpContext);
 
                 //if (account == null || account.ID == 0)
                 //{

@@ -10,7 +10,7 @@ namespace AnindaKapinda.DAL
     public class CreditCard
     {
         public int ID { get; set; }
-        public int Number { get; set; }
+        public string Number { get; set; }
         public string Name { get; set; }
         public DateTime Expiry { get; set; }
         public int Secure { get; set; }
