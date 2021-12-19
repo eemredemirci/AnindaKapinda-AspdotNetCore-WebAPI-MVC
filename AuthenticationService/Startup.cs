@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using AnindaKapinda.DAL;
 using AuthenticationService.Models;
 using FluentValidation.AspNetCore;
+using AnindaKapinda.API.Models.Repository;
 
 namespace AuthenticationService
 {
@@ -30,12 +31,17 @@ namespace AuthenticationService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>()); ;
+            services.AddControllers()
+                .AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>()).AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
 
             services.AddDbContext<AnindaKapindaDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB")));
 
             services.Configure<TokenOption>(Configuration.GetSection("TokenOption"));
+
+            services.AddScoped<IAppUser, AppUser>();
+
 
             services.AddAuthentication(options =>
             {

@@ -13,7 +13,7 @@ namespace AnindaKapinda.API
         public UserValidator()
         {
             RuleFor(a=>a.Password)
-                      .Matches("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$").WithMessage("Şifre en az 8 karakter olmalı ve büyük harf, küçük harf ve rakam içermelidir");
+                      .Matches("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$").WithMessage("Şifre büyük harf, küçük harf ve rakam içermelidir");
 
 
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AnindaKapinda.DAL.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialmigraion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,15 +21,29 @@ namespace AnindaKapinda.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Regions",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Regions", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsAccountActive = table.Column<bool>(type: "bit", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -51,7 +65,7 @@ namespace AnindaKapinda.DAL.Migrations
                     Discount = table.Column<float>(type: "real", nullable: true),
                     Desciption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: true)
+                    CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,24 +75,7 @@ namespace AnindaKapinda.DAL.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Categories",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Admins",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Admins", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Admins_Users_ID",
-                        column: x => x.ID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -163,7 +160,7 @@ namespace AnindaKapinda.DAL.Migrations
                     District = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Detail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MemberID = table.Column<int>(type: "int", nullable: true)
+                    MemberID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,7 +170,7 @@ namespace AnindaKapinda.DAL.Migrations
                         column: x => x.MemberID,
                         principalTable: "Members",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,7 +183,7 @@ namespace AnindaKapinda.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Expiry = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Secure = table.Column<int>(type: "int", nullable: false),
-                    MemberID = table.Column<int>(type: "int", nullable: true)
+                    MemberID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,7 +193,7 @@ namespace AnindaKapinda.DAL.Migrations
                         column: x => x.MemberID,
                         principalTable: "Members",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,7 +207,7 @@ namespace AnindaKapinda.DAL.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<short>(type: "smallint", nullable: false),
                     Discount = table.Column<float>(type: "real", nullable: false),
-                    CourierID = table.Column<int>(type: "int", nullable: true),
+                    CourierID = table.Column<int>(type: "int", nullable: false),
                     AddressID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -227,7 +224,7 @@ namespace AnindaKapinda.DAL.Migrations
                         column: x => x.CourierID,
                         principalTable: "Couriers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -317,9 +314,6 @@ namespace AnindaKapinda.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admins");
-
-            migrationBuilder.DropTable(
                 name: "CreditCards");
 
             migrationBuilder.DropTable(
@@ -327,6 +321,9 @@ namespace AnindaKapinda.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderProduct");
+
+            migrationBuilder.DropTable(
+                name: "Regions");
 
             migrationBuilder.DropTable(
                 name: "SupplyOfficers");

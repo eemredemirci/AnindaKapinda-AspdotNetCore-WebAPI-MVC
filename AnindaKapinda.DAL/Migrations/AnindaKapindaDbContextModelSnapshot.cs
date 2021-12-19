@@ -35,7 +35,7 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MemberID")
+                    b.Property<int>("MemberID")
                         .HasColumnType("int");
 
                     b.Property<string>("Province")
@@ -76,7 +76,7 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<DateTime>("Expiry")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MemberID")
+                    b.Property<int>("MemberID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -105,7 +105,7 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<int?>("AddressID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CourierID")
+                    b.Property<int>("CourierID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -139,7 +139,7 @@ namespace AnindaKapinda.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryID")
+                    b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Desciption")
@@ -162,6 +162,24 @@ namespace AnindaKapinda.DAL.Migrations
                     b.HasIndex("CategoryID");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("AnindaKapinda.DAL.Region", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.User", b =>
@@ -271,7 +289,9 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Member", "Member")
                         .WithMany("Addresses")
-                        .HasForeignKey("MemberID");
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Member");
                 });
@@ -280,7 +300,9 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Member", "Member")
                         .WithMany("CreditCards")
-                        .HasForeignKey("MemberID");
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Member");
                 });
@@ -293,7 +315,9 @@ namespace AnindaKapinda.DAL.Migrations
 
                     b.HasOne("AnindaKapinda.DAL.Courier", "Courier")
                         .WithMany("Orders")
-                        .HasForeignKey("CourierID");
+                        .HasForeignKey("CourierID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
 
@@ -304,7 +328,9 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryID");
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });

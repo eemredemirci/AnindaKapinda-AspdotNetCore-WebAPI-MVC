@@ -14,7 +14,7 @@ namespace AnindaKapinda.DAL
         public string District { get; set; }
         public string Street { get; set; }
         public string Detail { get; set; }
-
+        public int MemberID { get; set; }
         public Member Member { get; set; }
     }
 }

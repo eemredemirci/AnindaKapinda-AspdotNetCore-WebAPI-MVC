@@ -20,6 +20,7 @@ namespace AnindaKapinda.DAL
         public decimal Price { get; set; }
         public short Quantity { get; set; }
         public float Discount { get; set; }
+        public int CourierID { get; set; }
 
         public Courier Courier { get; set; }
         public Address Address { get; set; }

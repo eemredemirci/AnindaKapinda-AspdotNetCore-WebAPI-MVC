@@ -28,6 +28,7 @@ namespace AnindaKapinda.DAL
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CreditCard> CreditCards { get; set; }
+        public DbSet<Region> Regions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
