@@ -23,17 +23,14 @@ namespace AnindaKapinda.API.Controllers
         [HttpPost]
         public IActionResult AddCreditCard(CreditCard creditCard)
         {
-            
-            //ID den üyeyi bul
-            Member member = context.Members.SingleOrDefault(a => a.ID == account.ID);
 
-            if (member == null)
+            if (account == null)
             {
                 return NotFound("Üye bulunamadı");
             }
             else
             {
-                creditCard.MemberID = member.ID;
+                creditCard.MemberID = account.ID;
                 context.CreditCards.Add(creditCard);
                 context.SaveChanges();
 
@@ -41,8 +38,7 @@ namespace AnindaKapinda.API.Controllers
             }
         }
         
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteCreditCardById(int id)
         {
             CreditCard creditCard = context.CreditCards.SingleOrDefault(a => a.ID == id);

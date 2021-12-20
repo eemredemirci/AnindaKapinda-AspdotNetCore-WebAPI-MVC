@@ -22,17 +22,17 @@ namespace AuthenticationService.Controllers
     [AllowAnonymous]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AuthenticationController : BaseController
+    public class UserController : BaseController
     {
 
         //public List<Token> listTokens = new();
 
-        public AuthenticationController(AnindaKapindaDbContext context):base(context)
+        public UserController(AnindaKapindaDbContext context) : base(context)
         {
-            
+
         }
 
-        //Sadece üye ekle
+        // Sadece üye ekle
         [HttpPost]
         public IActionResult AddMember(UserModelForRegister member)
         {
@@ -49,7 +49,7 @@ namespace AuthenticationService.Controllers
                 }
 
             }
-            //Mail kayıtlarda yoksa
+            // Mail kayıtlarda yoksa
             else if (mail == null)
             {
                 context.AddRange(new Member
@@ -64,17 +64,40 @@ namespace AuthenticationService.Controllers
                 });
                 context.SaveChanges();
 
-                return Ok("Üye başarıyla kaydedildi. Hesapınızı aktifleştirmek için e-postanızı kontrol ediniz.");
+                User user = context.Members.SingleOrDefault(id => id.ID == member.ID);
+
+                return CreatedAtAction("SendActivationMail", "User", new { id = user.ID });
             }
 
             return BadRequest("Kayıt oluşturulamadı");
         }
 
-        //Bütün kullanıcı girişleri
+        // Hesabı Aktif etmek için eposta gönder
+        [HttpGet("{id}")]
+        public IActionResult SendActivationMail(int id)
+        {
+            // mail gönder
+
+            return CreatedAtAction("ActivateUser", "User", new { id = id });
+        }
+
+        // Hesabı Aktifleştir
+        [HttpGet("{id}")]
+        public IActionResult ActivateUser(int id)
+        {
+            // Hesabı update yap
+            User login = context.Users.SingleOrDefault(a => a.ID == id);
+            login.IsAccountActive = true;
+            context.SaveChanges();
+
+            return Ok("Kullanıcı hesabı aktifleştirildi. Giriş yapabilirsiniz");
+        }
+
+        // Bütün kullanıcı girişleri
         [HttpPost]
         public IActionResult Login(User user)
         {
-            //Admin yoksa ekle
+            //Admin yoksa defaultAdmin ekle
             User admin = context.Users.SingleOrDefault(a => a.Role == "Admin");
             if (admin == null)
             {
@@ -91,11 +114,16 @@ namespace AuthenticationService.Controllers
                 context.SaveChanges();
             }
 
-            //Kullanıcıyı bul
+            // Kullanıcıyı bul
             User login = context.Users.SingleOrDefault(a => a.Mail == user.Mail && a.Password == user.Password);
 
-            //Password Mail doğru mu?
-            if (login != null && login.Password == user.Password && login.Mail == user.Mail)
+            if (!login.IsAccountActive)
+            {
+                return BadRequest("Hesabı aktifleştirin");
+            }
+
+            // Password Mail doğru mu?
+            else if (login != null && login.Password == user.Password && login.Mail == user.Mail)
             {
                 //Token üretiliyor.
                 TokenHandler tokenHandler = new TokenHandler();
@@ -123,5 +151,7 @@ namespace AuthenticationService.Controllers
                 return Unauthorized("Kullanıcı bulunamadı");
             }
         }
+
+
     }
 }

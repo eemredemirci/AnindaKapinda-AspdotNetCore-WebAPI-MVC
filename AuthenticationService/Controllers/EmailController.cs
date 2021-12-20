@@ -1,5 +1,4 @@
-﻿using AnindaKapinda.DAL;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,12 +9,7 @@ namespace AnindaKapinda.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : BaseController
+    public class EmailController : ControllerBase
     {
-        public AdminController(AnindaKapindaDbContext context) : base(context)
-        {
-
-        }
-
     }
 }

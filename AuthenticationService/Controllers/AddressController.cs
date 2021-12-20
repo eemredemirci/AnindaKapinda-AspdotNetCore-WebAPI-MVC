@@ -26,14 +26,14 @@ namespace AnindaKapinda.API.Controllers
         [HttpPost]
         public IActionResult AddAddress(Address address)
         {
-            // Claim'den üye ID al
-            string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int id = int.Parse(userID);
+            //// Claim'den üye ID al
+            //string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //int id = int.Parse(userID);
 
-            //ID den üyeyi bul
-            Member member = context.Members.SingleOrDefault(a => a.ID == id);
+            ////ID den üyeyi bul
+            //Member member = context.Members.SingleOrDefault(a => a.ID == id);
 
-            if (member == null)
+            if (account == null)
             {
                 return NotFound("Üye bulunamadı");
             }
@@ -52,19 +52,18 @@ namespace AnindaKapinda.API.Controllers
             }
             else
             {
-                address.MemberID = member.ID;
+                address.MemberID = account.ID;
                 context.Addresses.Add(address);
                 context.SaveChanges();
 
                 return Ok(address);
             }
         }
+
         //Adres sil
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteAddressById(int id)
         {
-
             //ID den bul
             Address address = context.Addresses.SingleOrDefault(a => a.ID == id);
 
