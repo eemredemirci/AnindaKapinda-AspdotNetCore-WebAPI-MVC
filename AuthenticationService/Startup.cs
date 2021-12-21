@@ -15,6 +15,8 @@ using AnindaKapinda.DAL;
 using AuthenticationService.Models;
 using FluentValidation.AspNetCore;
 using AnindaKapinda.API.Models.Repository;
+using AnindaKapinda.API.Models;
+using AnindaKapinda.API.Services;
 
 namespace AuthenticationService
 {
@@ -42,6 +44,8 @@ namespace AuthenticationService
 
             services.AddScoped<IAppUser, AppUser>();
 
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
 
             services.AddAuthentication(options =>
             {

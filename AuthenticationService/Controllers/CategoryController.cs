@@ -1,4 +1,5 @@
-﻿using AnindaKapinda.DAL;
+﻿using AnindaKapinda.API.Services;
+using AnindaKapinda.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,16 +16,35 @@ namespace AnindaKapinda.API.Controllers
     [ApiController]
     public class CategoryController : BaseController
     {
-        public CategoryController(AnindaKapindaDbContext context) : base(context)
+        public CategoryController(AnindaKapindaDbContext context,IMailService mailService) : base(context, mailService)
         {
 
+        }
+
+        [AllowAnonymous]
+        public IActionResult GetCategory()
+        {
+            if(currentAddress==null&& account.Role=="Member")
+            {
+                return BadRequest("Lütfen önce adres seçiniz");
+            }
+
+            List<Category> categories = context.Categories.ToList();
+
+            if (categories.Count != 0)
+            {
+                return Ok(categories);
+            }
+
+            return NoContent();
         }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetCategoryByID(int id)
         {
-            List<Category> categories = context.Categories.Where(c => c.ID == id).ToList();
+
+            List<Category> categories = context.Categories.Where(c => c.CategoryId == id).ToList();
             if (categories.Count != 0)
             {
                 return Ok(categories);
@@ -47,7 +67,7 @@ namespace AnindaKapinda.API.Controllers
                 context.Categories.Add(category);
                 context.SaveChanges();
 
-                return CreatedAtAction("GetCategoryByID", "Category", new { id = category.ID });
+                return Ok(category);
             }
         }
 
@@ -57,7 +77,7 @@ namespace AnindaKapinda.API.Controllers
         {
 
             //ID den bul
-            Category category = context.Categories.SingleOrDefault(p => p.ID == id);
+            Category category = context.Categories.SingleOrDefault(p => p.CategoryId == id);
 
             var categoryProducts = context.Categories.OrderBy(e => e.Name).Include(e => e.Products).First();
 
@@ -86,7 +106,7 @@ namespace AnindaKapinda.API.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateCategory(Category category)
         {
-            Category updated = context.Categories.SingleOrDefault(p => p.ID == category.ID);
+            Category updated = context.Categories.SingleOrDefault(p => p.CategoryId == category.CategoryId);
             
             if (account == null)
             {
@@ -100,7 +120,7 @@ namespace AnindaKapinda.API.Controllers
             {
                 updated.Name = category.Name;
                 context.SaveChanges();
-                return CreatedAtAction("GetCategoryByID", "Category", new { id = category.ID });
+                return CreatedAtAction("GetCategoryByID", "Category", new { id = category.CategoryId });
             }
         }
     }

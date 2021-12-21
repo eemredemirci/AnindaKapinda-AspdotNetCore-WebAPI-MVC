@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using AnindaKapinda.DAL;
 
 namespace AnindaKapinda.API.Services
 {
@@ -19,13 +20,18 @@ namespace AnindaKapinda.API.Services
             _mailSettings = mailSettings.Value;
         }
 
-        public async Task SendEmailAsync(MailRequest mailRequest)
+        public async Task SendEmailAsync(User user)
         {
+            MailRequest mailRequest = new MailRequest();
+            mailRequest.ToEmail = user.Mail;
+            mailRequest.Subject = "Anında Kapında Hesap Aktivasyonu";
+            mailRequest.Body = "<p>Hesap aktivasyonu <a href=" + (char)34 + "http://localhost:63642/api/User/ActivateUser/" + user.UserId + (char)34 + ">Aktifleştir</a></p>";
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = mailRequest.Subject;
             var builder = new BodyBuilder();
+
             if (mailRequest.Attachments != null)
             {
                 byte[] fileBytes;

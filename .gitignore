@@ -364,3 +364,4 @@ FodyWeavers.xsd
 AuthenticationService/appsettings.json
 AuthenticationService/appsettings.json
 *.json
+*.json

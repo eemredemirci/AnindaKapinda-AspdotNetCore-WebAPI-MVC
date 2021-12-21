@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AnindaKapinda.DAL.Migrations
 {
-    public partial class initialmigraion : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,34 +11,34 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.ID);
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Regions",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    RegionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Province = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Regions", x => x.ID);
+                    table.PrimaryKey("PK_Regions", x => x.RegionId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -51,30 +51,30 @@ namespace AnindaKapinda.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.ID);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Discount = table.Column<float>(type: "real", nullable: true),
+                    Discount = table.Column<float>(type: "real", nullable: false),
                     Desciption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ID);
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryID",
-                        column: x => x.CategoryID,
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "ID",
+                        principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -82,18 +82,18 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Phone = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.ID);
+                    table.PrimaryKey("PK_Employees", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Employees_Users_ID",
-                        column: x => x.ID,
+                        name: "FK_Employees_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -101,16 +101,16 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Members",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Members", x => x.ID);
+                    table.PrimaryKey("PK_Members", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Members_Users_ID",
-                        column: x => x.ID,
+                        name: "FK_Members_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -118,17 +118,17 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Couriers",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Couriers", x => x.ID);
+                    table.PrimaryKey("PK_Couriers", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Couriers_Employees_ID",
-                        column: x => x.ID,
+                        name: "FK_Couriers_Employees_UserId",
+                        column: x => x.UserId,
                         principalTable: "Employees",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -136,16 +136,16 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "SupplyOfficers",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SupplyOfficers", x => x.ID);
+                    table.PrimaryKey("PK_SupplyOfficers", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_SupplyOfficers_Employees_ID",
-                        column: x => x.ID,
+                        name: "FK_SupplyOfficers_Employees_UserId",
+                        column: x => x.UserId,
                         principalTable: "Employees",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -153,23 +153,23 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    AddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Province = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Detail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MemberID = table.Column<int>(type: "int", nullable: false)
+                    MemberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.ID);
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
                     table.ForeignKey(
-                        name: "FK_Addresses_Members_MemberID",
-                        column: x => x.MemberID,
+                        name: "FK_Addresses_Members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Members",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -177,22 +177,22 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "CreditCards",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    CreditCardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Expiry = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Secure = table.Column<int>(type: "int", nullable: false),
-                    MemberID = table.Column<int>(type: "int", nullable: false)
+                    MemberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CreditCards", x => x.ID);
+                    table.PrimaryKey("PK_CreditCards", x => x.CreditCardId);
                     table.ForeignKey(
-                        name: "FK_CreditCards_Members_MemberID",
-                        column: x => x.MemberID,
+                        name: "FK_CreditCards_Members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Members",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -200,127 +200,113 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CourierId = table.Column<int>(type: "int", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<short>(type: "smallint", nullable: false),
                     Discount = table.Column<float>(type: "real", nullable: false),
-                    CourierID = table.Column<int>(type: "int", nullable: false),
-                    AddressID = table.Column<int>(type: "int", nullable: true)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.ID);
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Orders_Addresses_AddressID",
-                        column: x => x.AddressID,
-                        principalTable: "Addresses",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Orders_Couriers_CourierID",
-                        column: x => x.CourierID,
+                        name: "FK_Orders_Couriers_CourierId",
+                        column: x => x.CourierId,
                         principalTable: "Couriers",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MemberOrder",
-                columns: table => new
-                {
-                    MembersID = table.Column<int>(type: "int", nullable: false),
-                    OrdersID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemberOrder", x => new { x.MembersID, x.OrdersID });
                     table.ForeignKey(
-                        name: "FK_MemberOrder_Members_MembersID",
-                        column: x => x.MembersID,
+                        name: "FK_Orders_Members_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Members",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MemberOrder_Orders_OrdersID",
-                        column: x => x.OrdersID,
-                        principalTable: "Orders",
-                        principalColumn: "ID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProduct",
+                name: "OrderDetails",
                 columns: table => new
                 {
-                    OrdersID = table.Column<int>(type: "int", nullable: false),
-                    ProductsID = table.Column<int>(type: "int", nullable: false)
+                    OrderDetailId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<short>(type: "smallint", nullable: false),
+                    Discount = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProduct", x => new { x.OrdersID, x.ProductsID });
+                    table.PrimaryKey("PK_OrderDetails", x => x.OrderDetailId);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Orders_OrdersID",
-                        column: x => x.OrdersID,
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "ID",
+                        principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Products_ProductsID",
-                        column: x => x.ProductsID,
+                        name: "FK_OrderDetails_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "ID",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_MemberID",
+                name: "IX_Addresses_MemberId",
                 table: "Addresses",
-                column: "MemberID");
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CreditCards_MemberID",
+                name: "IX_CreditCards_MemberId",
                 table: "CreditCards",
-                column: "MemberID");
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemberOrder_OrdersID",
-                table: "MemberOrder",
-                column: "OrdersID");
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_ProductsID",
-                table: "OrderProduct",
-                column: "ProductsID");
+                name: "IX_OrderDetails_ProductId",
+                table: "OrderDetails",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_AddressID",
+                name: "IX_Orders_CourierId",
                 table: "Orders",
-                column: "AddressID");
+                column: "CourierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CourierID",
+                name: "IX_Orders_MemberId",
                 table: "Orders",
-                column: "CourierID");
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryID",
+                name: "IX_Products_CategoryId",
                 table: "Products",
-                column: "CategoryID");
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
                 name: "CreditCards");
 
             migrationBuilder.DropTable(
-                name: "MemberOrder");
-
-            migrationBuilder.DropTable(
-                name: "OrderProduct");
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
                 name: "Regions");
@@ -335,16 +321,13 @@ namespace AnindaKapinda.DAL.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Addresses");
-
-            migrationBuilder.DropTable(
                 name: "Couriers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Members");
 
             migrationBuilder.DropTable(
-                name: "Members");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Employees");

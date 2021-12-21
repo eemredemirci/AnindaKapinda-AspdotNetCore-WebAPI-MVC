@@ -1,4 +1,5 @@
 ﻿using AnindaKapinda.API.Models;
+using AnindaKapinda.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace AnindaKapinda.API.Services
 {
     public interface IMailService
     {
-        Task SendEmailAsync(MailRequest mailRequest);
+        Task SendEmailAsync(User user);
     }
 }

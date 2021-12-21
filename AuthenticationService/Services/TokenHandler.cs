@@ -29,7 +29,7 @@ namespace AuthenticationService.Models
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()));
             claims.Add(new Claim(ClaimTypes.Email, user.Mail));
             claims.Add(new Claim(ClaimTypes.Name, user.Name));
             claims.Add(new Claim(ClaimTypes.Role, user.Role));

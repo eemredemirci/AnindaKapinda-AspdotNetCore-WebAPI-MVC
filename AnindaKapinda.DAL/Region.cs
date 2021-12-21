@@ -8,7 +8,7 @@ namespace AnindaKapinda.DAL
 {
     public class Region
     {
-        public int ID { get; set; }
+        public int RegionId { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
     }

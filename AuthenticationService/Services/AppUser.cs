@@ -22,7 +22,7 @@ namespace AnindaKapinda.API.Models.Repository
             int id = int.Parse(userID);
 
             //ID den üyeyi bul
-            User user = context.Members.SingleOrDefault(a => a.ID == id);
+            User user = context.Members.SingleOrDefault(a => a.UserId == id);
             return user;
         }
     }

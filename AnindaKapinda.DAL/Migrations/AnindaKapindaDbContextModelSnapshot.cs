@@ -21,7 +21,7 @@ namespace AnindaKapinda.DAL.Migrations
 
             modelBuilder.Entity("AnindaKapinda.DAL.Address", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -35,7 +35,7 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MemberID")
+                    b.Property<int>("MemberId")
                         .HasColumnType("int");
 
                     b.Property<string>("Province")
@@ -44,16 +44,16 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("AddressId");
 
-                    b.HasIndex("MemberID");
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Category", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -61,14 +61,14 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.CreditCard", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("CreditCardId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -76,7 +76,7 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<DateTime>("Expiry")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MemberID")
+                    b.Property<int>("MemberId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -88,64 +88,101 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<int>("Secure")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("CreditCardId");
 
-                    b.HasIndex("MemberID");
+                    b.HasIndex("MemberId");
 
                     b.ToTable("CreditCards");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Order", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AddressID")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CourierID")
+                    b.Property<int>("CourierId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
+                    b.Property<string>("Detail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<short>("Quantity")
-                        .HasColumnType("smallint");
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AddressID");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("CourierID");
+                    b.HasIndex("CourierId");
+
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("AnindaKapinda.DAL.Product", b =>
+            modelBuilder.Entity("AnindaKapinda.DAL.OrderDetail", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("OrderDetailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryID")
+                    b.Property<float>("Discount")
+                        .HasColumnType("real");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<short>("Quantity")
+                        .HasColumnType("smallint");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
+                });
+
+            modelBuilder.Entity("AnindaKapinda.DAL.Product", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Desciption")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Discount")
+                    b.Property<float>("Discount")
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
@@ -157,16 +194,16 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ID");
+                    b.HasKey("ProductId");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Region", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("RegionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -177,14 +214,14 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("Province")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("RegionId");
 
                     b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.User", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -213,39 +250,9 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("MemberOrder", b =>
-                {
-                    b.Property<int>("MembersID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrdersID")
-                        .HasColumnType("int");
-
-                    b.HasKey("MembersID", "OrdersID");
-
-                    b.HasIndex("OrdersID");
-
-                    b.ToTable("MemberOrder");
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsID")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersID", "ProductsID");
-
-                    b.HasIndex("ProductsID");
-
-                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Employee", b =>
@@ -289,7 +296,7 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Member", "Member")
                         .WithMany("Addresses")
-                        .HasForeignKey("MemberID")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -300,7 +307,7 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Member", "Member")
                         .WithMany("CreditCards")
-                        .HasForeignKey("MemberID")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -309,67 +316,58 @@ namespace AnindaKapinda.DAL.Migrations
 
             modelBuilder.Entity("AnindaKapinda.DAL.Order", b =>
                 {
-                    b.HasOne("AnindaKapinda.DAL.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID");
-
                     b.HasOne("AnindaKapinda.DAL.Courier", "Courier")
                         .WithMany("Orders")
-                        .HasForeignKey("CourierID")
+                        .HasForeignKey("CourierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.HasOne("AnindaKapinda.DAL.Member", "Member")
+                        .WithMany("Orders")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Courier");
+
+                    b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("AnindaKapinda.DAL.OrderDetail", b =>
+                {
+                    b.HasOne("AnindaKapinda.DAL.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AnindaKapinda.DAL.Product", "Product")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Product", b =>
                 {
                     b.HasOne("AnindaKapinda.DAL.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryID")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("MemberOrder", b =>
-                {
-                    b.HasOne("AnindaKapinda.DAL.Member", null)
-                        .WithMany()
-                        .HasForeignKey("MembersID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnindaKapinda.DAL.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("AnindaKapinda.DAL.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnindaKapinda.DAL.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AnindaKapinda.DAL.Employee", b =>
                 {
                     b.HasOne("AnindaKapinda.DAL.User", null)
                         .WithOne()
-                        .HasForeignKey("AnindaKapinda.DAL.Employee", "ID")
+                        .HasForeignKey("AnindaKapinda.DAL.Employee", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -378,7 +376,7 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.User", null)
                         .WithOne()
-                        .HasForeignKey("AnindaKapinda.DAL.Member", "ID")
+                        .HasForeignKey("AnindaKapinda.DAL.Member", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -387,7 +385,7 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Employee", null)
                         .WithOne()
-                        .HasForeignKey("AnindaKapinda.DAL.Courier", "ID")
+                        .HasForeignKey("AnindaKapinda.DAL.Courier", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -396,7 +394,7 @@ namespace AnindaKapinda.DAL.Migrations
                 {
                     b.HasOne("AnindaKapinda.DAL.Employee", null)
                         .WithOne()
-                        .HasForeignKey("AnindaKapinda.DAL.SupplyOfficer", "ID")
+                        .HasForeignKey("AnindaKapinda.DAL.SupplyOfficer", "UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -406,11 +404,23 @@ namespace AnindaKapinda.DAL.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("AnindaKapinda.DAL.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("AnindaKapinda.DAL.Product", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
             modelBuilder.Entity("AnindaKapinda.DAL.Member", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("CreditCards");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("AnindaKapinda.DAL.Courier", b =>

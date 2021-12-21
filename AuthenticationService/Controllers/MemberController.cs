@@ -10,6 +10,7 @@ using AnindaKapinda.DAL;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using AnindaKapinda.API.Services;
 
 namespace AnindaKapinda.API.Controllers
 {
@@ -20,28 +21,16 @@ namespace AnindaKapinda.API.Controllers
     public class MemberController : BaseController
     {
 
-        public MemberController(AnindaKapindaDbContext context) : base(context)
+        public MemberController(AnindaKapindaDbContext context,IMailService mailService) : base(context, mailService)
         {
            
         }
 
-        [HttpGet]
-        public IActionResult GetOrders(Order order)
-        {
-            return Ok();
-        }
+        
 
-        [HttpGet]
-        public IActionResult GetAddresses(Address address)
-        {
-            return Ok();
-        }
+        
 
-        [HttpGet]
-        public IActionResult GetCreditCards(CreditCard creditCard)
-        {
-            return Ok();
-        }
+        
 
     }
 }

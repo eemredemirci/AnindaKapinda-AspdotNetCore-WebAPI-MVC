@@ -1,4 +1,5 @@
-﻿using AnindaKapinda.DAL;
+﻿using AnindaKapinda.API.Services;
+using AnindaKapinda.DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ namespace AnindaKapinda.API.Controllers
     [ApiController]
     public class AdminController : BaseController
     {
-        public AdminController(AnindaKapindaDbContext context) : base(context)
+        public AdminController(AnindaKapindaDbContext context, IMailService mailService) : base(context, mailService)
         {
 
         }

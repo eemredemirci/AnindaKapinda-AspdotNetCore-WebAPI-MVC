@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication;
 using AnindaKapinda.API;
 using FluentValidation.Results;
 using AnindaKapinda.API.Controllers;
+using AnindaKapinda.API.Services;
+using AnindaKapinda.API.Models;
 
 namespace AuthenticationService.Controllers
 {
@@ -27,19 +29,21 @@ namespace AuthenticationService.Controllers
 
         //public List<Token> listTokens = new();
 
-        public UserController(AnindaKapindaDbContext context) : base(context)
+        public UserController(AnindaKapindaDbContext context, IMailService mailService) : base(context,mailService)
         {
 
         }
 
+        
+
         // Sadece üye ekle
         [HttpPost]
-        public IActionResult AddMember(UserModelForRegister member)
+        public async Task<IActionResult> AddMember(UserModelForRegister member)
         {
             var mail = context.Members.SingleOrDefault(a => a.Mail == member.Mail);
             UserValidator validator = new UserValidator();
             ValidationResult results = validator.Validate(member);
-
+            
             if (!results.IsValid)
             {
                 foreach (var error in results.Errors)
@@ -64,30 +68,26 @@ namespace AuthenticationService.Controllers
                 });
                 context.SaveChanges();
 
-                User user = context.Members.SingleOrDefault(id => id.ID == member.ID);
+                User user = context.Members.SingleOrDefault(mail => mail.Mail == member.Mail);
+                // Mail gönder
+                
+                await mailService.SendEmailAsync(user);
 
-                return CreatedAtAction("SendActivationMail", "User", new { id = user.ID });
+                return Ok("Hesap aktivasyonu için mailinizi kontrol ediniz");
             }
 
             return BadRequest("Kayıt oluşturulamadı");
         }
 
-        // Hesabı Aktif etmek için eposta gönder
-        [HttpGet("{id}")]
-        public IActionResult SendActivationMail(int id)
-        {
-            // mail gönder
 
-            return CreatedAtAction("ActivateUser", "User", new { id = id });
-        }
 
         // Hesabı Aktifleştir
         [HttpGet("{id}")]
         public IActionResult ActivateUser(int id)
         {
             // Hesabı update yap
-            User login = context.Users.SingleOrDefault(a => a.ID == id);
-            login.IsAccountActive = true;
+            User user = context.Users.SingleOrDefault(a => a.UserId == id);
+            user.IsAccountActive = true;
             context.SaveChanges();
 
             return Ok("Kullanıcı hesabı aktifleştirildi. Giriş yapabilirsiniz");
@@ -119,7 +119,7 @@ namespace AuthenticationService.Controllers
 
             if (!login.IsAccountActive)
             {
-                return BadRequest("Hesabı aktifleştirin");
+                return BadRequest("Epostanıza gelen link ile hesabı aktifleştirin");
             }
 
             // Password Mail doğru mu?

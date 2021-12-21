@@ -1,4 +1,5 @@
 ﻿using AnindaKapinda.API.Models.Repository;
+using AnindaKapinda.API.Services;
 using AnindaKapinda.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,9 +18,25 @@ namespace AnindaKapinda.API.Controllers
     [ApiController]
     public class AddressController : BaseController
     {
-        public AddressController(AnindaKapindaDbContext context) : base(context)
+        
+        public AddressController(AnindaKapindaDbContext context, IMailService mailService) : base(context, mailService)
         {
 
+        }
+
+        [HttpGet]
+        public IActionResult GetAddresses()
+        {
+            List<Address> addresses = context.Addresses.ToList();
+            return Ok(addresses);
+        }
+
+        //Varsayılan Adresi seçme
+        [HttpGet("{id}")]
+        public IActionResult SelectAddressByID(int id)
+        {
+            currentAddress = context.Addresses.SingleOrDefault(a=>a.AddressId==id);
+            return Ok(currentAddress);
         }
 
         //Adres ekle
@@ -37,6 +54,8 @@ namespace AnindaKapinda.API.Controllers
             {
                 return NotFound("Üye bulunamadı");
             }
+
+            // Bölge kontrolü
             var city = context.Regions.SingleOrDefault(a => a.City == address.City);
             var province = context.Regions.SingleOrDefault(a => a.Province == address.Province);
 
@@ -45,14 +64,15 @@ namespace AnindaKapinda.API.Controllers
                 return BadRequest("Geçici olarak " + address.City + " bölgesine hizmet verememekteyiz");
 
             }
-            //Mail kayıtlarda yoksa
+
+            // Mail kayıtlarda yoksa
             else if (province == null)
             {
                 return BadRequest("Geçici olarak " + address.Province + " bölgesine hizmet verememekteyiz");
             }
             else
             {
-                address.MemberID = account.ID;
+                address.MemberId = account.UserId;
                 context.Addresses.Add(address);
                 context.SaveChanges();
 
@@ -65,7 +85,7 @@ namespace AnindaKapinda.API.Controllers
         public IActionResult DeleteAddressById(int id)
         {
             //ID den bul
-            Address address = context.Addresses.SingleOrDefault(a => a.ID == id);
+            Address address = context.Addresses.SingleOrDefault(a => a.AddressId == id);
 
             if (address == null)
             {

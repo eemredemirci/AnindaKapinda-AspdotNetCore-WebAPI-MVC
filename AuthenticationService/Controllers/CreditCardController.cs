@@ -1,4 +1,5 @@
-﻿using AnindaKapinda.DAL;
+﻿using AnindaKapinda.API.Services;
+using AnindaKapinda.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,17 @@ namespace AnindaKapinda.API.Controllers
     [ApiController]
     public class CreditCardController : BaseController
     {
-        public CreditCardController(AnindaKapindaDbContext context) : base(context)
+        public CreditCardController(AnindaKapindaDbContext context, IMailService mailService) : base(context, mailService)
         {
 
         }
-       
+
+        [HttpGet]
+        public IActionResult GetCreditCards(CreditCard creditCard)
+        {
+            return Ok();
+        }
+
         [HttpPost]
         public IActionResult AddCreditCard(CreditCard creditCard)
         {
@@ -30,7 +37,7 @@ namespace AnindaKapinda.API.Controllers
             }
             else
             {
-                creditCard.MemberID = account.ID;
+                creditCard.MemberId = account.UserId;
                 context.CreditCards.Add(creditCard);
                 context.SaveChanges();
 
@@ -41,7 +48,7 @@ namespace AnindaKapinda.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteCreditCardById(int id)
         {
-            CreditCard creditCard = context.CreditCards.SingleOrDefault(a => a.ID == id);
+            CreditCard creditCard = context.CreditCards.SingleOrDefault(a => a.CreditCardId == id);
 
             if (creditCard == null)
             {
