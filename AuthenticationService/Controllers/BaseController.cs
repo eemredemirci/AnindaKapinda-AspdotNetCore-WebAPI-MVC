@@ -34,7 +34,7 @@ namespace AnindaKapinda.API.Controllers
             try
             {
                 account = UserInfo(HttpContext);
-                
+                currentAddress = null;
                 //if (account == null || account.ID == 0)
                 //{
                 //    actioncontext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "User", action = "Login" }));

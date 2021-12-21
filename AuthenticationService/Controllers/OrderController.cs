@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,24 +25,24 @@ namespace AnindaKapinda.API.Controllers
 
         public IActionResult GetOrder()
         {
-            //Order orders = context.Orders.SingleOrDefault(o => o.MemberID == account.ID));
-            //List<OrderDetail> orderDetails = context.OrderDetails.Where(details => details.OrderID == orders.ID).ToList();
-            //if (orders != null)
-            //{
-            //    return Ok(orderDetails);
-            //}
+            var filtered = context.Orders
+                .Include(order => order.OrderDetails)
+                .ToList();
 
-            return NoContent();
+            return Ok(filtered);
         }
 
 
         [HttpGet("{id}")]
         public IActionResult GetOrderByID(int id)
         {
-            List<Order> orders = context.Orders.Where(c => c.OrderId == id).ToList();
-            if (orders.Count != 0)
+            var filtered = context.Orders.Where(c => c.OrderId == id)
+                .Include(c => c.OrderDetails)
+                .ToList();
+
+            if (filtered != null)
             {
-                return Ok(orders);
+                return Ok(filtered);
             }
 
             return NoContent();
@@ -48,7 +50,7 @@ namespace AnindaKapinda.API.Controllers
 
 
         [HttpPost("{creditcardId}")]
-        public IActionResult AddOrder(List<OrderDetail> orderDetail, int creditcardId)
+        public IActionResult AddOrder(Order order, int creditcardId)
         {
             //if(creditcardId ==0)
             //{
@@ -62,30 +64,42 @@ namespace AnindaKapinda.API.Controllers
             {
                 return NotFound("Kullanıcı bulunamadı");
             }
-            else if (address==null)
-            {
-                return NotFound("Adres bulunamadı");
-            }
+            //else if (address == null)
+            //{
+            //    return NotFound("Adres bulunamadı");
+            //}
             else
             {
-                Order order = new Order();
-                order.MemberId = member.UserId;
-                order.Status = "Hazırlanıyor";
-                order.Date = DateTime.Now;
-                order.City = address.City;
-                order.Province = address.Province;
-                order.District = address.District;
-                order.Street = address.Street;
-                order.Detail = address.Detail;
+                Order myOrder = new Order();
 
-                
-
-                order.OrderDetails = orderDetail;
-                context.Orders.Add(order);
+                myOrder.MemberId = member.UserId;
+                myOrder.Status = "Hazırlanıyor";
+                myOrder.Date = DateTime.Now;
+                myOrder.City = address.City;
+                myOrder.Province = address.Province;
+                myOrder.District = address.District;
+                myOrder.Street = address.Street;
+                myOrder.Detail = address.Detail;
+                myOrder.OrderDetails = order.OrderDetails;
+                context.Orders.Add(myOrder);
                 context.SaveChanges();
 
+                OrderDetail myOrderDetail = new OrderDetail();
 
-                return Ok(order);
+
+                myOrderDetail = context.OrderDetails.SingleOrDefault(o => o.OrderId == 0);
+
+                Product product = context.Products.SingleOrDefault(p => p.ProductId == myOrderDetail.ProductId);
+                //myOrderDetail.Product = product;
+
+                myOrderDetail.OrderId = myOrder.OrderId;
+
+                decimal totalPrice = 0;
+
+                CreditCard creditCard = context.CreditCards.FirstOrDefault();
+                string lastDigits = creditCard.Number.Substring(creditCard.Number.Length - 4);
+
+                return Ok(" Sonu **** **** **** " + lastDigits + " ile biten kartınızdan" + totalPrice + "ödeme yapılmıştır");
             }
 
         }

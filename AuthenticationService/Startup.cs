@@ -17,6 +17,7 @@ using FluentValidation.AspNetCore;
 using AnindaKapinda.API.Models.Repository;
 using AnindaKapinda.API.Models;
 using AnindaKapinda.API.Services;
+using Newtonsoft.Json;
 
 namespace AuthenticationService
 {
@@ -34,10 +35,18 @@ namespace AuthenticationService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>()).AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
+                .AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                    options.SerializerSettings.Formatting = Formatting.Indented;
+                    
+                });
 
-            services.AddDbContext<AnindaKapindaDbContext>(options => 
+
+
+            services.AddDbContext<AnindaKapindaDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("AnindaKapindaDB")));
 
             services.Configure<TokenOption>(Configuration.GetSection("TokenOption"));

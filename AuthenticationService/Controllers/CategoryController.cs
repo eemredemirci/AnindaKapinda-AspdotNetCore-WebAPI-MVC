@@ -43,11 +43,13 @@ namespace AnindaKapinda.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCategoryByID(int id)
         {
+            var filtered = context.Categories.Where(c => c.CategoryId == id)
+                .Include(c => c.Products)
+                .ToList();
 
-            List<Category> categories = context.Categories.Where(c => c.CategoryId == id).ToList();
-            if (categories.Count != 0)
+            if (filtered != null)
             {
-                return Ok(categories);
+                return Ok(filtered);
             }
 
             return NoContent();

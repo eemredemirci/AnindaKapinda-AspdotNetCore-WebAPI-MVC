@@ -123,7 +123,7 @@ namespace AnindaKapinda.API.Controllers
             }
             else
             {
-                updated.Name = product.Name;
+                updated = product;
                 context.SaveChanges();
                 return CreatedAtAction("GetProductByID", "Product", new { id = product.ProductId });
             }
