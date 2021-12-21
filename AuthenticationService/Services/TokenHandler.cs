@@ -35,7 +35,7 @@ namespace AuthenticationService.Models
             claims.Add(new Claim(ClaimTypes.Role, user.Role));
 
             string audience = "";
-            if (user.Role == "Member")
+            if (user.Role == "Member"|| user.Role == "SupplyOfficer"||user.Role=="Courier")
             {
                 audience = tokenOption.Audiences[0];
             }

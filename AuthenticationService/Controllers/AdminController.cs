@@ -56,7 +56,7 @@ namespace AnindaKapinda.API.Controllers
         public async Task<IActionResult> AddCourier(Courier courier)
         {
             var mail = context.Couriers.SingleOrDefault(a => a.Mail == courier.Mail);
-
+            
             // Mail kayıtlarda yoksa
             if (mail == null)
             {
@@ -75,7 +75,7 @@ namespace AnindaKapinda.API.Controllers
                 });
                 context.SaveChanges();
 
-                User user = context.SupplyOfficers.SingleOrDefault(mail => mail.Mail == courier.Mail);
+                User user = context.Couriers.SingleOrDefault(mail => mail.Mail == courier.Mail);
                 // Mail gönder
 
                 await mailService.SendEmailAsync(user);

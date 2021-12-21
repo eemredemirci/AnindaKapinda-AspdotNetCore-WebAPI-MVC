@@ -22,10 +22,10 @@ namespace AnindaKapinda.API.Controllers
         }
         public IActionResult GetOrder()
         {
-            if (account.IsAccountActive)
+            User user = context.Users.SingleOrDefault(a => a.UserId == account.UserId);
+            if (user.IsAccountActive)
             {
                 var filtered = context.Orders.Where(a => a.Status == "Hazırlanıyor")
-                .Include(order => order.OrderDetails)
                 .ToList();
                 return Ok(filtered);
             }
@@ -35,21 +35,27 @@ namespace AnindaKapinda.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{orderId}")]
         public IActionResult ForwardOrder(int orderId)
         {
             Order order = context.Orders.SingleOrDefault(a => a.OrderId == orderId);
-
+            if(order==null)
+            {
+                return NotFound("Sipariş bulanamadı");
+            }
             Courier courier = context.Couriers.SingleOrDefault(a => a.Status == "Müsait");
-
+            if (courier == null)
+            {
+                return NotFound("Müsait kurye bulanamadı");
+            }
             order.CourierId = courier.UserId;
             order.Status = "Yola Çıktı";
             context.Orders.Update(order);
 
             courier.Status = "Meşgul";
             context.Couriers.Update(courier);
-
-            return Ok();
+            context.SaveChanges();
+            return Ok(order);
         }
 
     }

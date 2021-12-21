@@ -22,10 +22,11 @@ namespace AnindaKapinda.API.Controllers
         }
         public IActionResult GetOrder()
         {
-            if (account.IsAccountActive)
+            User user = context.Users.SingleOrDefault(a => a.UserId == account.UserId);
+
+            if (user.IsAccountActive)
             {
-                var filtered = context.Orders.Where(a => a.CourierId == account.UserId)
-                .Include(order => order.OrderDetails)
+                var filtered = context.Orders.Where(a => a.CourierId == account.UserId && a.Status == "Yola Çıktı")
                 .ToList();
                 return Ok(filtered);
             }
@@ -35,14 +36,31 @@ namespace AnindaKapinda.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult DeliverOrder(int orderId)
+        [HttpGet("{orderId}/{status}")]
+        public IActionResult DeliverOrder(int orderId, int status)
         {
             Order order = context.Orders.SingleOrDefault(a => a.OrderId == orderId);
             Courier courier = context.Couriers.FirstOrDefault();
             order.CourierId = courier.UserId;
-            order.Status = "Yola Çıktı";
-            return Ok();
+            if(status==1)
+            {
+                order.Status = "Teslim edildi ";
+
+            }
+            else if (status == 2)
+            {
+                order.Status = "Adres eksik/hatalı ";
+
+            }
+            if (status == 3)
+            {
+                order.Status = "Üye adreste yok";
+            }
+            courier.Status = "Müsait";
+            context.Couriers.Update(courier);
+            context.Orders.Update(order);
+            context.SaveChanges();
+            return Ok(order);
         }
 
     }

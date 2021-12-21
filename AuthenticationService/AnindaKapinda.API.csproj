@@ -21,8 +21,4 @@
     <ProjectReference Include="..\AnindaKapinda.DAL\AnindaKapinda.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Repository\" />
-  </ItemGroup>
-
 </Project>
