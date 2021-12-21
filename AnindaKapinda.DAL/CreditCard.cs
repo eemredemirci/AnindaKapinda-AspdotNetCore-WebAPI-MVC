@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class CreditCard
+    public class CreditCard
     {
-        public int ID { get; set; }
-        public int Number { get; set; }
+        public int CreditCardId { get; set; }
+        public string Number { get; set; }
         public string Name { get; set; }
         public DateTime Expiry { get; set; }
         public int Secure { get; set; }
-
+        public int MemberId { get; set; }
         public Member Member { get; set; }
 
     }

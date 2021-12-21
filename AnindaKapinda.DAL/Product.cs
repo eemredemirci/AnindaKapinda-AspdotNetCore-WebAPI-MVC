@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class Product
+    public class Product
     {
         public Product()
         {
-            Orders = new HashSet<Order>();
+            OrderDetails = new HashSet<OrderDetail>();
         }
-        public int ID { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public float? Discount { get; set; }
+        public float Discount { get; set; }
         public string Desciption { get; set; }
         public byte[] Photo { get; set; }
+        public int CategoryId { get; set; }
 
         public Category Category { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

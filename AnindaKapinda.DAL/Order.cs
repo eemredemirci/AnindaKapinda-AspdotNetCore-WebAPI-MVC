@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -7,23 +8,28 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda.DAL
 {
-    class Order
+    public class Order
     {
         public Order()
         {
-            Members = new HashSet<Member>();
-            Products = new HashSet<Product>();
+            OrderDetails = new HashSet<OrderDetail>();
         }
-        public int ID { get; set; }
+
+        public int OrderId { get; set; }
+        public int? CourierId { get; set; }
+        public int MemberId { get; set; }
         public string Status { get; set; }
         public DateTime Date { get; set; }
-        public decimal Price { get; set; }
-        public short Quantity { get; set; }
-        public float Discount { get; set; }
 
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string District { get; set; }
+        public string Street { get; set; }
+        public string Detail { get; set; }
+
+        public Member Member { get; set; }
         public Courier Courier { get; set; }
-        public Address Address { get; set; }
-        public ICollection<Member> Members { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+
     }
 }
