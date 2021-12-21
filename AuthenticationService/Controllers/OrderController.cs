@@ -80,26 +80,53 @@ namespace AnindaKapinda.API.Controllers
                 myOrder.District = address.District;
                 myOrder.Street = address.Street;
                 myOrder.Detail = address.Detail;
+                myOrder.CourierId = null;
                 myOrder.OrderDetails = order.OrderDetails;
+
                 context.Orders.Add(myOrder);
                 context.SaveChanges();
 
-                OrderDetail myOrderDetail = new OrderDetail();
-
-
-                myOrderDetail = context.OrderDetails.SingleOrDefault(o => o.OrderId == 0);
-
-                Product product = context.Products.SingleOrDefault(p => p.ProductId == myOrderDetail.ProductId);
-                //myOrderDetail.Product = product;
-
-                myOrderDetail.OrderId = myOrder.OrderId;
-
                 decimal totalPrice = 0;
 
-                CreditCard creditCard = context.CreditCards.FirstOrDefault();
+                // Orderların OrderDetail lerini ekle
+
+                OrderDetail myOrderDetail;
+                
+                do
+                {
+                    // Order üzerinden gelen circular json object okuması ile client tan gelen objede sadece productId ve Quantity
+                    // Db'de unitPrice ve Discount bilgisi eksik olanları bulup tek tek Güncelle
+                    // Aynı zamanda Fiyat hesaplaması yap
+                    myOrderDetail = context.OrderDetails.FirstOrDefault(a => a.UnitPrice == 0);
+                    // Eğer Fiyatı 0 olan ürün kalmadıysa çık
+                    if (myOrderDetail == null)
+                    {
+                        break;
+                    }
+                    Product product = context.Products.SingleOrDefault(a => a.ProductId == myOrderDetail.ProductId);
+                    myOrderDetail.UnitPrice = product.Price;
+                    totalPrice += product.Price * myOrderDetail.Quantity;
+                    myOrderDetail.Discount = product.Discount;
+                    totalPrice -= Convert.ToDecimal(product.Discount);
+
+                    context.Update(myOrderDetail);
+                    context.SaveChanges();
+
+                } while (myOrderDetail != null);
+
+                //Kart seçimi
+                CreditCard creditCard;
+                if (creditcardId!=0)
+                {
+                    creditCard = context.CreditCards.SingleOrDefault(a=>a.CreditCardId==creditcardId);
+                }
+                else
+                {
+                    creditCard = context.CreditCards.FirstOrDefault();
+                }
                 string lastDigits = creditCard.Number.Substring(creditCard.Number.Length - 4);
 
-                return Ok(" Sonu **** **** **** " + lastDigits + " ile biten kartınızdan" + totalPrice + "ödeme yapılmıştır");
+                return Ok(" Sonu **** **** **** " + lastDigits + " ile biten kartınızdan " + totalPrice + "TL ödeme yapılmıştır");
             }
 
         }

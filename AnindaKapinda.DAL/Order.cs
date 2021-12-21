@@ -16,7 +16,7 @@ namespace AnindaKapinda.DAL
         }
 
         public int OrderId { get; set; }
-        public int CourierId { get; set; }
+        public int? CourierId { get; set; }
         public int MemberId { get; set; }
         public string Status { get; set; }
         public DateTime Date { get; set; }

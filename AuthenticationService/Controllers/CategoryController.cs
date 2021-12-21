@@ -16,7 +16,7 @@ namespace AnindaKapinda.API.Controllers
     [ApiController]
     public class CategoryController : BaseController
     {
-        public CategoryController(AnindaKapindaDbContext context,IMailService mailService) : base(context, mailService)
+        public CategoryController(AnindaKapindaDbContext context, IMailService mailService) : base(context, mailService)
         {
 
         }
@@ -24,7 +24,7 @@ namespace AnindaKapinda.API.Controllers
         [AllowAnonymous]
         public IActionResult GetCategory()
         {
-            if(currentAddress==null&& account.Role=="Member")
+            if (currentAddress == null && account.Role == "Member")
             {
                 return BadRequest("Lütfen önce adres seçiniz");
             }
@@ -43,6 +43,11 @@ namespace AnindaKapinda.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCategoryByID(int id)
         {
+            if (currentAddress == null && account.Role == "Member")
+            {
+                return BadRequest("Lütfen önce adres seçiniz");
+            }
+
             var filtered = context.Categories.Where(c => c.CategoryId == id)
                 .Include(c => c.Products)
                 .ToList();
@@ -109,7 +114,7 @@ namespace AnindaKapinda.API.Controllers
         public IActionResult UpdateCategory(Category category)
         {
             Category updated = context.Categories.SingleOrDefault(p => p.CategoryId == category.CategoryId);
-            
+
             if (account == null)
             {
                 return NotFound("Admin bulunamadı");

@@ -29,12 +29,12 @@ namespace AuthenticationService.Controllers
 
         //public List<Token> listTokens = new();
 
-        public UserController(AnindaKapindaDbContext context, IMailService mailService) : base(context,mailService)
+        public UserController(AnindaKapindaDbContext context, IMailService mailService) : base(context, mailService)
         {
 
         }
 
-        
+
 
         // Sadece üye ekle
         [HttpPost]
@@ -43,7 +43,7 @@ namespace AuthenticationService.Controllers
             var mail = context.Members.SingleOrDefault(a => a.Mail == member.Mail);
             UserValidator validator = new UserValidator();
             ValidationResult results = validator.Validate(member);
-            
+
             if (!results.IsValid)
             {
                 foreach (var error in results.Errors)
@@ -70,7 +70,7 @@ namespace AuthenticationService.Controllers
 
                 User user = context.Members.SingleOrDefault(mail => mail.Mail == member.Mail);
                 // Mail gönder
-                
+
                 await mailService.SendEmailAsync(user);
 
                 return Ok("Hesap aktivasyonu için mailinizi kontrol ediniz");
@@ -117,9 +117,11 @@ namespace AuthenticationService.Controllers
             // Kullanıcıyı bul
             User login = context.Users.SingleOrDefault(a => a.Mail == user.Mail && a.Password == user.Password);
 
-            if (!login.IsAccountActive)
+            if (!login.IsAccountActive && login.Role == "Member")
             {
+
                 return BadRequest("Epostanıza gelen link ile hesabı aktifleştirin");
+
             }
 
             // Password Mail doğru mu?
@@ -151,7 +153,24 @@ namespace AuthenticationService.Controllers
                 return Unauthorized("Kullanıcı bulunamadı");
             }
         }
+        [Authorize]
+        public IActionResult UpdateUser(User user)
+        {
 
+            if (account != null)
+            {
+                User login = context.Users.SingleOrDefault(a => a.UserId == user.UserId);
+
+                if (login != null && login.Password != user.Password)
+                {
+                    login.IsAccountActive = true;
+                    context.Users.Update(login);
+                    context.SaveChanges();
+                }
+
+            }
+            return Ok(user);
+        }
 
     }
 }
